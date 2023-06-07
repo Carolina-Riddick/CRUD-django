@@ -1,0 +1,45 @@
+<!--{% load static %}-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <title>Tasks</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 offset-md-4">
+                <h1 class="display-4 fw-bold"> ➡️ Tasks </h1>
+            <form action="{% url 'new_task' %} " method="post" class="card card-body bg-secondary">
+               {% csrf_token %} <!-- tipo de cifrado -->
+                <label for="task"> New task </label>
+                <input type="text" name="task" placeholder="Insert new task..." class="from control mb-2" >
+                <label for="description">Description</label>
+                <textarea name="description" rows="5" placeholder="Insert description..." class="from control mb-2"></textarea>
+                <button class="btn btn-success" > Save ✅ </button>
+            </form>
+                {% for task in tasks %}
+                    <div class="list-group">
+                        <div class="card card-body bg-secondary text-ligth d-flex flex-row justify-content-between mt-2">
+                            <h3>{{task.title}}</h3>
+                            <p>{{task.description}}</p>
+                            <form action="{% url 'edit_task' task.id %}" method="POST">
+                                {% csrf_token %}
+                                <button class="btn btn-primary"> Edit Task 📝 </button>
+                            </form>
+                            <form action="{% url 'deleted_task' task.id %}" method="POST">
+                                {% csrf_token %}
+                                <button class="btn btn-danger"> Delete ❌ </button>
+                            </form>
+                        </div>
+                    </div>
+            {% empty %}
+              <h3 class="text-light">No Tasks</h3>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
